@@ -1,0 +1,38 @@
+name: Run ssh-keygen
+
+on:
+  workflow_dispatch:
+    inputs:
+      comment:
+        description: 'A comment to help you to identify the key, e.g. your email etc.'
+        required: false
+        type: string
+      encryption:
+        description: 'Encryption type'
+        required: true
+        default: 'rsa'
+        type: choice
+        options:
+        - dsa
+        - ecdsa
+        - ed25519
+        - rsa
+      bits:
+        description: 'Bits'
+        required: true
+        default: '4096'
+        type: string
+
+jobs:
+  generate_key:
+    runs-on: ubuntu-latest
+    name: A job to generate a key
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Test
+      uses: gitx-io/ssh-keygen-action@master
+      with:
+        comment: ${{ inputs.comment }}
+        encryption: ${{ inputs.encryption }}
+        bits: ${{ inputs.bits }}
